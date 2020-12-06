@@ -91,7 +91,7 @@ local PANEL = {}
 							net.SendToServer()
 							icon.disabled = true
 							icon:SetAlpha(70)
-							timer.Simple(nut.config.buyDelay, function()
+							timer.Simple(1, function()
 								if (IsValid(icon)) then
 									icon.disabled = false
 									icon:SetAlpha(255)
