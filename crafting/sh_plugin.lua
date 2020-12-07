@@ -138,42 +138,7 @@ function RECIPES:Register( tbl )
 							end
 						end
 					end
-				else
-					if (k == "cube_chip") then
-						local pouch = inventory:getFirstItemOfType("cube_chip_pouch")
-						if (pouch) then
-							local bagCount = pouch:getData("chipcount", 0)
-							if (bagCount >= v) then
-								pouch:setData("chipcount", bagCount - v)
-							end
-						end
-					end
 				end
-			end
-
-			local iness = player:getChar():getAttrib("medical", 0)
-			local craftMod = (iness * 0.1) + math.random(-2,2)
-
-			if (total > 0) then
-				avgQual = avgQual / total
-			else
-				--this is just so things that don't have any quality don't lean towards 0.
-				avgQual = craftMod
-			end
-
-			--calculates the final qualtiy by averaging the average quality and the craftiness modifier
-			local finQual = math.Round((avgQual + craftMod) * 0.5)
-			finQual = math.Clamp(finQual, 1, 16)
-
-			for k, v in pairs(self.result) do
-				local customData = {}--item:getData("custom", {})
-				customData.quality = qualities[finQual]
-				print("k, v", k, v)
-				for i = 1, v do
-					player:getChar():getInv():add(k)
-				end
-				nut.log.addRaw(player:Name() .. " crafted " .. nut.item.list[k].name .. ".")
-
 			end
 			player:notifyLocalized("donecrafting", self.name)
 
