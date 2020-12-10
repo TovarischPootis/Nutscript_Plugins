@@ -10,3 +10,6 @@ This is posted here for everyone who needs a working crafting plugin but if unab
 # GMTeleportPoints
 This plugin allows admins/gms to set up teleport points across the map. Allowing for quick teleportation and navigation.
 For convenience, use /gmtpmenu.
+
+# chatColorFix
+This plugin was made by Sample Name (Sample Name#2010). It fixes the chatbox colour setting, which is currently broken in default NS (both 1.1 and 1.1-beta). If you want to customize the chat color, use this plugin to avoid errors
