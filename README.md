@@ -12,3 +12,6 @@ For convenience, use /gmtpmenu.
 
 # chatColorFix
 This plugin was made by Sample Name (Sample Name#2010). It fixes the chatbox colour setting, which is currently broken in default NS (both 1.1 and 1.1-beta). If you want to customize the chat color, use this plugin to avoid errors
+
+# Crosshair
+This is basically the default plugin, but now has a config option to disable it without the need of deleting/disabling the plugin completely
