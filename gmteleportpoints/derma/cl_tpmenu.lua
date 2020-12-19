@@ -42,7 +42,7 @@ function PANEL:Init()
 						surface.PlaySound("buttons/blip1.wav")
 						netstream.Start("GMTPNewPoint", text)
 						self:Close()
-						table.insert(PLUGIN.TPPoints, text)
+						table.insert(PLUGIN.TPPoints, {name = text, sound = "", effect = ""})
 						vgui.Create("gmTPMenu")
 					end
 				)
@@ -55,7 +55,7 @@ end
 function PANEL:LoadPoints()
 	for k, v in pairs(PLUGIN.TPPoints) do
 	local panel = self.list:Add("DButton")
-		panel:SetText(v)
+		panel:SetText(v.name)
 		panel:SetFont("ChatFont")
 		panel:SetTextColor(color_white)
 		panel:SetTall(30)
@@ -65,7 +65,7 @@ function PANEL:LoadPoints()
 		panel.OnMousePressed = function(this, code)
 			if (code == MOUSE_LEFT) then
 				surface.PlaySound("buttons/blip1.wav")
-				netstream.Start("GMTPMove", v)
+				netstream.Start("GMTPMove", v.name)
 				self:Close()
 
 			elseif (code == MOUSE_RIGHT) then
@@ -76,16 +76,44 @@ function PANEL:LoadPoints()
 						Derma_StringRequest(
 							"Rename TP Point",
 							"Enter new TP Point Name",
-							v,
+							v.name,
 							function(text)
 							surface.PlaySound("buttons/blip1.wav")
-							netstream.Start("GMTPUpdateName", v, text)
+							netstream.Start("GMTPUpdateName", v.name, text)
 							self:Close()
-							PLUGIN.TPPoints[k] = text
+							PLUGIN.TPPoints[k].name = text
 							vgui.Create("gmTPMenu")
 							end
 						)
 					end):SetImage("icon16/comment.png")
+					menu:AddOption("Edit Sound Effect", function()
+						Derma_StringRequest(
+							"Edit Sound Effect",
+							"Enter new sound effect path, set to empty for no sound effect",
+							v.sound,
+							function(text)
+							surface.PlaySound("buttons/blip1.wav")
+							netstream.Start("GMTPUpdateSound", v.name, v.sound, text or "")
+							self:Close()
+							PLUGIN.TPPoints[k].sound = text or ""
+							vgui.Create("gmTPMenu")
+							end
+						)
+					end):SetImage("icon16/sound.png")
+					menu:AddOption("Edit Particle Effect", function()
+						Derma_StringRequest(
+							"Edit Particle Effect",
+							"Enter new particle effect path, set to empty for no particle effect",
+							v.effect,
+							function(text)
+							surface.PlaySound("buttons/blip1.wav")
+							netstream.Start("GMTPUpdateEffect", v.name, v.effect, text or "")
+							self:Close()
+							PLUGIN.TPPoints[k].effect = text or ""
+							vgui.Create("gmTPMenu")
+							end
+						)
+					end):SetImage("icon16/weather_sun.png")
 					menu:AddOption("Move to Point", function()
 						netstream.Start("GMTPMove", v)
 					end):SetImage("icon16/door_in.png")
@@ -108,6 +136,6 @@ vgui.Register("gmTPMenu", PANEL, "DFrame")
 netstream.Hook("gmTPMenu", function(data)
 	PLUGIN.TPPoints = {}
 	for _, n in pairs(data) do table.insert(PLUGIN.TPPoints, n) end
-	table.sort(PLUGIN.TPPoints)
+	table.sort(PLUGIN.TPPoints, function(a,b) return a.name < b.name end)
 	areaManager = vgui.Create("gmTPMenu")
 end)

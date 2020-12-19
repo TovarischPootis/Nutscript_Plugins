@@ -22,25 +22,26 @@ end
 
 function PLUGIN:AddPoint(client, name, pos)
 	if not name or not pos then client:notify("Invalid Info Provided") return end
-	table.insert(self.tpPoints, {name, pos})
+	table.insert(self.tpPoints, {name = name, pos = pos, sound = "", effect = ""})
 	client:notify("TP Point " .. name .. " added")
 	self:saveTPPoints()
 end
 
 function PLUGIN:RemovePoint(client, name)
-if not name then client:notify("Invalid Info Provided") return end
-local posID, properName
+	if not name then client:notify("Invalid Info Provided") return end
+
+	local posID, properName
 	for k, v in pairs(self.tpPoints) do
-		if v[1] == name then
+		if v.name == name then
 		posID = k
-		properName = v[1]
+		properName = v.name
 		break end
 	end
 	if not posID then
 		for k, v in pairs(self.tpPoints) do
 			if (nut.util.stringMatches(v[1], name)) then
 				posID = k
-				properName = v[1]
+				properName = v.name
 				break
 			end
 		end
@@ -52,49 +53,94 @@ local posID, properName
 	client:notify("TP Point " .. properName .. " removed")
 end
 
-function PLUGIN:RenamePoint(client, name, newname)
-	if not name or not newname then client:notify("Invalid Info Provided") return end
+function PLUGIN:RenamePoint(client, name, newName)
+	if not name or not newName then client:notify("Invalid Info Provided") return end
 	local properName
 	for k, v in pairs(self.tpPoints) do
-		if v[1] == name then
-		properName = v[1]
-		v[1] = newname
+		if v.name == name then
+		properName = v.name
+		v.name = newName
 		break end
 	end
 	if not properName then
 		for k, v in pairs(self.tpPoints) do
-			if (nut.util.stringMatches(v[1], name)) then
-				properName = v[1]
-				v[1] = newname
+			if (nut.util.stringMatches(v.name, name)) then
+				properName = v.name
+				v.name = newName
 				break
 			end
 		end
 	end
 	if not properName then client:notify("Invalid TP Point Name Provided") return end
 	self:saveTPPoints()
-	client:notify("Point " .. properName ..  " has been renamed to " .. newname)
+	client:notify("Point " .. properName ..  " has been renamed to " .. newName)
+end
+
+function PLUGIN:UpdateSound(client, name, sound, newSound)
+	if not sound or not newSound then client:notify("Invalid Info Provided") return end
+	local properSound
+	for k, v in pairs(self.tpPoints) do
+		print(v.name)
+		if v.name == name then
+		properSound = v.sound
+		v.sound = newSound
+		break end
+	end
+	if not properSound then client:notify("Invalid Sound Path Provided") return end
+	self:saveTPPoints()
+	client:notify("Point " .. name .. "'s sound effect was updated to" .. newSound)
+end
+
+function PLUGIN:UpdateEffect(client, name, effect, newEffect)
+	if not effect or not newEffect then client:notify("Invalid Info Provided") return end
+	local properEffect
+	for k, v in pairs(self.tpPoints) do
+		if v.name == name then
+		properEffect = v.effect
+		v.effect = newEffect
+		break end
+	end
+	if not properEffect then client:notify("Invalid Effect Path Provided") return end
+	self:saveTPPoints()
+	client:notify("Point " .. name .. "'s effect was updated to" .. newEffect)
 end
 
 function PLUGIN:MoveToPoint(client, name)
 	if not name then client:notify("Invalid Info Provided") return end
-	local properName, pos
+	local properName, pos, sound, effect
 	for k, v in pairs(self.tpPoints) do
-		if v[1] == name then
-		properName = v[1]
-		pos = v[2]
+		if v.name == name then
+		properName = v.name
+		pos = v.pos
+		sound = v.sound
+		effect = v.effect
 		break end
 	end
 	if not properName then
 		for k, v in pairs(self.tpPoints) do
-			if (nut.util.stringMatches(v[1], name)) then
-				properName = v[1]
-				pos = v[2]
+			if (nut.util.stringMatches(v.name, name)) then
+				properName = v.name
+				pos = v.pos
+				sound = v.sound
+				effect = v.effect
 				break
 			end
 		end
 	end
 	if not properName then client:notify("Invalid TP Point Name Provided") return end
+	if effect and effect ~= "" then
+		local effectData = EffectData()
+		effectData:SetOrigin(client:GetPos())
+		util.Effect(effect, effectData)
+	end
 	client:SetPos(pos)
+	if sound and sound ~= "" then client:EmitSound(sound) end
+	if effect and effect ~= "" then
+		local effectData = EffectData()
+		effectData:SetOrigin(client:GetPos())
+		util.Effect(effect, effectData)
+	end
+
 	client:notify("Moved to " .. properName)
 end
 
@@ -109,9 +155,19 @@ netstream.Hook("GMTPNewPoint", function(client, name)
 	PLUGIN:AddPoint(client, name, pos)
 end)
 
-netstream.Hook("GMTPUpdateName", function(client, oldname, newname)
+netstream.Hook("GMTPUpdateName", function(client, oldName, newName)
 	if not client:IsAdmin() then return end
-	PLUGIN:RenamePoint(client, oldname, newname)
+	PLUGIN:RenamePoint(client, oldName, newName)
+end)
+
+netstream.Hook("GMTPUpdateSound", function(client, name, oldSound, newSound)
+	if not client:IsAdmin() then return end
+	PLUGIN:UpdateSound(client, name, oldSound, newSound)
+end)
+
+netstream.Hook("GMTPUpdateEffect", function(client, name, oldEffect, newEffect)
+	if not client:IsAdmin() then return end
+	PLUGIN:UpdateEffect(client, name, oldEffect, newEffect)
 end)
 
 netstream.Hook("GMTPDelete", function(client, name)
@@ -154,7 +210,7 @@ nut.command.add("gmtpmenu", {
 	onRun = function(client, arguments)
 		local datatable = {}
 		for k, v in pairs(PLUGIN.tpPoints) do
-			table.insert(datatable, v[1])
+			table.insert(datatable, {name = v.name, sound = v.sound, effect = v.effect})
 		end
 		netstream.Start(client, "gmTPMenu", datatable )
 	end
