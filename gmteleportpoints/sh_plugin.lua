@@ -218,11 +218,17 @@ nut.command.add("gmtpmenu", {
 
 nut.command.add("gmtpmoveto", {
 	adminOnly = true,
-	syntax = "<string name>",
+	syntax = "<string target (optional)><string name>",
 	onRun = function(client, arguments)
-		local name = table.concat(arguments, " ", 1)
-		print(name)
-		PLUGIN:MoveToPoint(client, name)
+		local name, target
+		if nut.command.findPlayer(client, arguments[1]) then
+			target = nut.command.findPlayer(client, arguments[1])
+			name = table.concat(arguments, " ", 2)
+		else
+			target = client
+			name = table.concat(arguments, " ", 1)
+		end
+		PLUGIN:MoveToPoint(target, name)
 	end
 })
 
