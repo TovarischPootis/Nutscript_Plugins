@@ -124,23 +124,28 @@ function RECIPES:Register( tbl )
 								itemObj:remove()
 							end
 						else --necessary stacks are split across multiple items
-							local all = inventory:getItems()
-							for m, extraStack in pairs (all) do
-								if (k == extraStack.uniqueID) then
-									local amount = extraStack:getData("Amount", 1)
-									if (amount <= v) then
-										v = v - amount
-										extraStack:remove()
-									else
-										extraStack:setData("Amount", amount - v)
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-			player:notifyLocalized("donecrafting", self.name)
+                            local all = inventory:getItems()
+                            for _, extraStack in pairs (all) do
+                                if (k == extraStack.uniqueID) then
+                                    local amount = extraStack:getData("Amount", 1)
+                                    if (amount <= v) then
+                                        v = v - amount
+                                        extraStack:remove()
+                                    else
+                                        extraStack:setData("Amount", amount - v)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    for k, v in pairs( self.result ) do
+                        for i = 1, v do
+                            player:getChar():getInv():add(k)
+                        end
+                    end
+                end
+            end
+            player:notifyLocalized("donecrafting", self.name)
 
 		end
 	end
