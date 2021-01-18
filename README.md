@@ -4,7 +4,7 @@ Most if not all are made for Nutscript 1.1-beta, so if you are using another ver
 
 # Crafting
 This is a slightly editted version of Chancer's crafting plugin from respite, found here: https://github.com/Chancerawr/respite/tree/master/respite/plugins/crafting
-This is posted here for everyone who needs a working crafting plugin but if unable or unwilling to spend 10 minutes to fix it themselves.
+This is posted here for everyone who needs a working crafting plugin but is unable or unwilling to spend 10 minutes to fix it themselves.
 
 # GMTeleportPoints
 This plugin allows admins/gms to set up teleport points across the map. Allowing for quick teleportation and navigation.
