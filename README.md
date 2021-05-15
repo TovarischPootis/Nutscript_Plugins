@@ -11,8 +11,8 @@ This plugin allows admins/gms to set up teleport points across the map. Allowing
 For convenience, use /gmtpmenu.
 
 # chatColorFix
-!!!NUTSCRIPT 1.1-beta HAS FIXED THIS ISSUE ALREADY. YOU DO NOT NEED THIS IF YOU ARE USING THE LATEST VERSION OF 1.1-beta!!!
-This plugin was made by Sample Name (Sample Name#2010). It fixes the chatbox colour setting, which is currently broken in default NS (both 1.1 and 1.1-beta). If you want to customize the chat color, use this plugin to avoid errors
+!!!NUTSCRIPT 1.2 HAS FIXED THIS ISSUE ALREADY. YOU DO NOT NEED THIS IF YOU ARE USING THE LATEST VERSION OF 1.2!!!
+This plugin was made by Sample Name (Sample Name#2010). It fixes the chatbox colour setting, which is currently broken in default NS (1.1). If you want to customize the chat color, use this plugin to avoid errors
 
 # Crosshair
 This is basically the default plugin, but now has a config option to disable it without the need of deleting/disabling the plugin completely
