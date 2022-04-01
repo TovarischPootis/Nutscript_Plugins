@@ -6,6 +6,9 @@ Most if not all are made for Nutscript 1.2, so if you are using another version 
 This is a slightly editted version of Chancer's crafting plugin from respite, found here: https://github.com/Chancerawr/respite/tree/master/respite/plugins/crafting
 This is posted here for everyone who needs a working crafting plugin but is unable or unwilling to spend 10 minutes to fix it themselves.
 
+# Cinematic Text
+Text that appears with blackbars, for that extra cinematic effect. Useful for GMs when the players enter a new area for an event, for instance.
+
 # GMTeleportPoints
 This plugin allows admins/gms to set up teleport points across the map. Allowing for quick teleportation and navigation.
 For convenience, use /gmtpmenu.
